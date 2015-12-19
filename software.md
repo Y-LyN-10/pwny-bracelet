@@ -6,7 +6,7 @@ It's only streaming data from the accelerometer.
 
 ESP8266 firmware (written in *lua* or *arduino*):
 - Wire (read data from the accelerometer)
-- HTTP server to stream the data 
+- TCP server to stream the data 
 
 The software has to:
 - receive and store raw data from the device (*node.js* web server)
@@ -21,4 +21,4 @@ Features:
 
 And finally - it has to be **user-frienly** and **portable**, so there will be no need to install libs, dependencies and so on. 
 
-*Just plug & play*!
+**Just plug & play**!
