@@ -4,10 +4,14 @@ Software
 The bracelet is not smart. 
 It's only streaming data from the accelerometer.
 
+ESP8266 firmware (written in *lua* or *arduino*):
+- Wire (read data from the accelerometer)
+- HTTP server to stream the data 
+
 The software has to:
-- receive and store raw data from the device (node.js web server)
-- recognize patterns using mathematical model (KNN with python)
-- execute command (node.js & bash / powershell)
+- receive and store raw data from the device (*node.js* web server)
+- recognize patterns using mathematical model (KNN with *python*)
+- execute command (*node.js* & *bash* / *powershell*)
 
 Features:
 - Config mode - (re)Map any gesture to any command
