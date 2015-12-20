@@ -22,6 +22,9 @@ const char* host = "10.0.203.231";
 const char* streamId   = "....................";
 const char* privateKey = "....................";
 
+float G[3]={0.0,0.0,0.0};
+float alpha=0.9;
+
 void setup() {
   Serial.begin(115200);
   delay(10);
@@ -81,23 +84,38 @@ void loop() {
     Serial.println("connection failed");
     return;
   }
+
+
+  G[0] = alpha * G[0] + (1-alpha) * accel.X;
+  G[1] = alpha * G[1] + (1-alpha) * accel.Y;
+  G[2] = alpha * G[2] + (1-alpha) * accel.Z;
+  
+  //char* row;
+  //sprintf(row, "%d,%d,%d", accel.X - G[0], accel.Y - G[1], accel.Z - G[2]);
+  
+  String row = String(int(accel.X - G[0])) + "," + String(int(accel.Y - G[1])) + "," + String(int(accel.Z - G[2]));
+  Serial.println(row);
+  
   
   // We now create a URI for the request
   String url = "/stream";
-  String tsData = String("X=" + accel.X);
+  String tsData = String(accel.X);
+  //Serial.println(tsData);
   
   Serial.print("Requesting URL: ");
   Serial.println(url);
+
+
   
   // This will send the request to the server
   client.print(String("POST ") + url + " HTTP/1.1\r\n" + "Host: " + host + "\r\n");
-  client.print("Content-Type: application/x-www-form-urlencoded\n");
+  client.print("Content-Type: application/x-www-form-urlencoded\r\n");
   client.print("Content-Length: ");
   client.print(tsData.length());
-  client.print("\n\n");
+  client.print("\r\n\r\n");
   client.print(tsData);
   client.print("Connection: close\r\n\r\n");
-  
+ 
   delay(1000);
   
   // Read all the lines of the reply from server and print them to Serial
