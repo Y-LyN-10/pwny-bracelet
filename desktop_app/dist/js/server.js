@@ -8,7 +8,7 @@ function handleRequest(req, res){
 
     console.log("[200] " + req.method + " to " + req.url);
 
-    if (req.method == 'POST') {
+    if (req.method == 'POST' && req.url == '/stream') {
         req.on('data', function(chunk) {
             data += chunk.toString();
             console.log("Received body data");
