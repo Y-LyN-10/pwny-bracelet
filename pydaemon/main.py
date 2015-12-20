@@ -6,6 +6,9 @@ import time
 import random
 
 def exec_command(cmd):
+    cmd = cmd.strip()
+    if not cmd.endswith('&'):
+        cmd += ' &'
     parts = cmd.split(' ')
     call(parts)
 
@@ -32,9 +35,10 @@ def read_data(folderPath):
                 with open(file) as f:
                     CMDS[folder] = f.read().strip()
             else:
+                V = integrate_vector(integrate_vector(read_vector(file)))
                 TS.append({
                     'name': folder,
-                    'data': read_vector(file)
+                    'data': V
                 })
 
     return (TS, CMDS)
@@ -168,6 +172,11 @@ def reliefF(TS, P, k, m):
     return W
 
 
+def integrate_vector(V):
+    result = [0]
+    for v in V:
+        result.append( result[len(result) - 1] + v)
+    return result
 
 def kNN(V,TS,k):
     D = []
@@ -193,38 +202,64 @@ def kNN_weighted(V,TS,k,W):
 
     return D[:k]
 
+def prepare_TS(dataPath):
+    P = read_data_counts(dataPath)
+    TS, CMDS = read_data(dataPath)
+    W = reliefF(TS, P, 3, 100)
+    return (TS,W,CMDS)
 
 
 
 dataPath   = join(dirname(realpath(__file__)), '../data')
 streamPath = join(dirname(realpath(__file__)), '../stream')
+
+if __name__ == '__main__':
+    dataPath   = join(dirname(realpath(__file__)), 'data')
+    streamPath = join(dirname(realpath(__file__)), 'stream')
+
+
+
 refreshInterval = 10000
+TS,W,CMDS=prepare_TS(dataPath)
+refresh = time.time() + refreshInterval
 
-P = read_data_counts(dataPath)
-TS, CMDS = read_data(dataPath)
-W = reliefF(TS, P, 3, 100)
 
-refresh = time.time()
-
-#print(P)
-#print('CMDS: ', CMDS)
-
-# TODO: FEATURE SELECTION
-# TODO: EXAMPLES CHANGE LISTENER
+lastexec = 0
+T = 100000
 
 while True:
     V = read_vector(streamPath)
-    print(kNN(V,TS,5))
-    print(kNN_weighted(V,TS,5,W))
-    break
+    K = kNN(V,TS,5)
+    #K = kNN_weighted(V,TS,5,W)
+    D = {}
+    for k in K:
+        if not k[1] in D:
+            D[k[1]] = {
+                'count': 0,
+                'weight': 0
+            }
+        D[k[1]]['count']  += 1
+        D[k[1]]['weight'] += k[2]
+
+    for k in D:
+        D[k]['weight'] = D[k]['weight'] / D[k]['count']
+
+
+    minD = -1
+    NN   = False
+    for k in D:
+        if minD < 0 or minD < D[k]['weight']:
+            minD = D[k]['weight']
+            NN   = k
+
+    if minD < T:
+        if time.time() < lastexec + 1.5:
+            continue
+        lastexec = time.time()
+        exec_command(CMDS[NN])
+
+    if refresh + refreshInterval > time.time():
+        TS,W,CMDS=prepare_TS(dataPath)
+        refresh = time.time() + refreshInterval
+
     time.sleep(0.02)
-
-
-
-
-'''
-for file in list_folder('testset')['files']:
-    print(file)
-    V = read_vector(file)
-    print(kNN(V,TS,5))
-'''
