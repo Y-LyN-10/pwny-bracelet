@@ -32,9 +32,9 @@ app.on('window-all-closed', function() {
 });
 
 app.on('ready', function() {
-  mainWindow = new BrowserWindow({width: 1200, height: 800});
+  mainWindow = new BrowserWindow({width: 1000, height: 500});
   mainWindow.loadURL(path.join('file://', __dirname, options.views_dir, options.root_view));
-  if(options.debug) { mainWindow.openDevTools(); }
+  //if(options.debug) { mainWindow.openDevTools(); }
   mainWindow.on('closed', function() { mainWindow = null; });
 });
 
