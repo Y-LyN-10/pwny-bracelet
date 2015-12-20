@@ -1,5 +1,5 @@
 from os import listdir
-from os.path import isfile, join
+from os.path import isfile, join, dirname, realpath
 from subprocess import call
 import math
 import time
@@ -195,8 +195,9 @@ def kNN_weighted(V,TS,k,W):
 
 
 
-dataPath   = '../data'
-streamPath = '../stream'
+
+dataPath   = join(dirname(realpath(__file__)), '../data')
+streamPath = join(dirname(realpath(__file__)), '../stream')
 refreshInterval = 10000
 
 P = read_data_counts(dataPath)
