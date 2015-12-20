@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html ng-app="Home">
+  <head>
+    <title>PWNy Bracelet</title>
+    <link rel="stylesheet" href="../dist/vendor/bootstrap/dist/css/bootstrap.min.css"/>
+    <!-- bower:css -->
+    <link rel="stylesheet" href="../dist/vendor/skeleton/css/skeleton.css" />
+    <!-- endbower -->
+    <!-- CUSTOM CSS -->
+    <link rel="stylesheet" href="../dist/css/style.css">
+  </head>
+  <body ng-controller="HomeController as vm">
+
+  <div class="row">
+    <div class="container" style="margin-top:20px;">
+      <span class="h2">PWNy Bracelet Configuration</span>
+      <span class="glyphicon glyphicon-cog pull-left" style="font-size: 1.5em; margin: 5px;"></span>
+      <span class="pull-right">connecting...</span>
+    </div>
+  </div>
+
+    <!-- // TODO:
+
+    1. Check if the connection is alive
+    2. List all saved gestures (read from the file system)
+       - create template for gestures -->
+
+    <!-- gestures -->
+    <div class="table-responsive" style="padding:20px;">
+      <table class="table table-bordered">
+        <thead class="thead" style="background-color: #ceeeb8">
+          <tr class="row">
+            <th class="col-md-5">
+              <strong>Gesture name</strong></th>
+            <th class="col-md-6">
+              <strong>Command</strong>
+            </th>
+            <th class="col-md-1"></th>
+          </tr>
+        </thead>
+
+        <tbody class="tbody">
+          <tr class="row" ng-repeat="gesture in vm.gestures" style="max-height: 30px;">
+            <td class="col-md-5">
+              <span>{{gesture.name}}</span>
+              <button type="button" class="btn btn-info btn-xs pull-right">Train</button>
+            </td>
+            <td class="col-md-6 table-bordered table-condensed">
+              <code style="padding: 7px 2px; position: relative; top: 5px;">
+                {{gesture.command}}
+              </code>
+              <button type="button" class="btn btn-success btn-sm pull-right">
+                <span class="glyphicon glyphicon-console" aria-hidden="true"></span>
+              </button>
+            </td>
+            <td class="col-md-1">
+              <button type="button" class="btn btn-danger btn-sm">
+                <span class=" glyphicon glyphicon-trash" aria-hidden="true"></span>
+              </button>
+              <button type="button" class="btn btn-warning btn-sm">
+                <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+
+      </table>
+    </div>
+
+  <footer style="text-align: center; background-color: #e7eedf; padding: 10px 0; position: fixed; width: 100%; bottom: 0;">
+    <span class="glyphicon glyphicon-heart text-info"></span>
+    <a href="https://github.com/Y-LyN-10/pwny-bracelet" class="text-info" ng-click="openNewWindow()">Open Source</a>
+  </footer>
+
+    <!-- REQUIRED -->
+    <script src="../jspm_packages/system.js"></script>
+    <script src="../config.js"></script>
+    <!-- bower:js -->
+    <script src="../dist/vendor/jquery/dist/jquery.js"></script>
+
+    <!-- Hack -->
+    <script type="application/javascript">
+      if (typeof module === 'object' && typeof module.exports !== 'undefined') {
+        window.$ = window.jQuery = module.exports;
+      }
+    </script>
+
+    <script src="../dist/vendor/angularjs/angular.js"></script>
+    <script src="../dist/vendor/angular-mocks/angular-mocks.js"></script>
+    <script src="../dist/vendor/bootstrap/dist/js/bootstrap.js"></script>
+
+    <script type="application/javascript">
+      if (typeof module === 'object' && typeof module.exports !== 'undefined') {
+        window.Slider = module.exports;
+      }
+    </script>
+
+    <!-- endbower -->
+    <script src="../dist/app/home/home.js"></script>
+    <script src="../dist/js/sample.js"></script>
+    <!--<script src="../dist/js/server.js"></script>-->
+    <!--<script src="../dist/js/tcp.js"></script>-->
+  </body>
+</html>
